@@ -55,4 +55,13 @@ li {
 a {
   color: #42b983;
 }
+
+.login-container a{color:#0078de;}
+#canvascontainer{
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
 </style>
