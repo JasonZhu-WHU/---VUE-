@@ -2,8 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HelloWorld from '../components/HelloWorld'
 import Login from '../components/login.vue'
+import axios from 'axios'
 
 Vue.use(VueRouter)
+Vue.prototype.$axios = axios
 
 const routes = [
   {
