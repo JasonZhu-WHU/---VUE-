@@ -70,7 +70,7 @@
               alert("请输入正确的用户名或密码！")
             } else {
               _this.$router.push({
-                name: `Home`,
+                name: 'Home',
                 params: {
                   userId: response.data.userId
                 }

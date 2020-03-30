@@ -1,67 +1,80 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <a-layout id="components-layout-demo-top-side-2">
+    <a-layout-header class="header">
+      <div class="logo" />
+      <a-menu
+        theme="dark"
+        mode="horizontal"
+        :defaultSelectedKeys="['2']"
+        :style="{ lineHeight: '64px' }"
+      >
+        <a-menu-item key="1">nav 1</a-menu-item>
+        <a-menu-item key="2">nav 2</a-menu-item>
+        <a-menu-item key="3">nav 3</a-menu-item>
+      </a-menu>
+    </a-layout-header>
+    <a-layout>
+      <a-layout-sider width="200" style="background: #fff">
+        <a-menu
+          mode="inline"
+          :defaultSelectedKeys="['1']"
+          :defaultOpenKeys="['sub1']"
+          :style="{ height: '100%', borderRight: 0 }"
+        >
+          <a-sub-menu key="sub1">
+            <span slot="title"><a-icon type="user" />subnav 1</span>
+            <a-menu-item key="1">option1</a-menu-item>
+            <a-menu-item key="2">option2</a-menu-item>
+            <a-menu-item key="3">option3</a-menu-item>
+            <a-menu-item key="4">option4</a-menu-item>
+          </a-sub-menu>
+          <a-sub-menu key="sub2">
+            <span slot="title"><a-icon type="laptop" />subnav 2</span>
+            <a-menu-item key="5">option5</a-menu-item>
+            <a-menu-item key="6">option6</a-menu-item>
+            <a-menu-item key="7">option7</a-menu-item>
+            <a-menu-item key="8">option8</a-menu-item>
+          </a-sub-menu>
+          <a-sub-menu key="sub3">
+            <span slot="title"><a-icon type="notification" />subnav 3</span>
+            <a-menu-item key="9">option9</a-menu-item>
+            <a-menu-item key="10">option10</a-menu-item>
+            <a-menu-item key="11">option11</a-menu-item>
+            <a-menu-item key="12">option12</a-menu-item>
+          </a-sub-menu>
+        </a-menu>
+      </a-layout-sider>
+      <a-layout style="padding: 0 24px 24px">
+        <a-breadcrumb style="margin: 16px 0">
+          <a-breadcrumb-item>Home</a-breadcrumb-item>
+          <a-breadcrumb-item>List</a-breadcrumb-item>
+          <a-breadcrumb-item>App</a-breadcrumb-item>
+        </a-breadcrumb>
+        <a-layout-content
+          :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
+        >
+          Content
+        </a-layout-content>
+      </a-layout>
+    </a-layout>
+  </a-layout>
 </template>
-
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+  export default {
+    data() {
+      return {
+        collapsed: false,
+      };
+    },
+  };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-
-.login-container a{color:#0078de;}
-#canvascontainer{
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-}
+<style>
+  #components-layout-demo-top-side-2 .logo {
+    width: 120px;
+    height: 31px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px 28px 16px 0;
+    float: left;
+  }
 </style>
