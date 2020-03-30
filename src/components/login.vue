@@ -9,7 +9,7 @@
       <a-form id="loginForm" :form="form" class="login-form" @submit="handleSubmit">
         <a-form-item>
           <a-input class="Input" v-model="username" v-decorator="[
-          'userName',
+          'username',
           { rules: [{ required: true, message: 'Please input your username!' }] },
         ]"
             placeholder="Username">
@@ -53,30 +53,33 @@
     },
     methods: {
       handleSubmit(e) {
-        var _this=this;
+        var _this = this;
         e.preventDefault();
         this.form.validateFields((err, values) => {
           if (!err) {
             console.log('Received values of form: ', values)
           }
-          axios.post('https://csquare.wang:8081/user/seller/authentication',{
-              username: _this.username,
-              password: _this.password
-          }).then(function(response){
+          console.log(values)
+          axios.post('/api/user/seller/authentication', {
+            username: values.username,
+            password: values.password
+          }).then(function(response) {
             console.log(response);
-            if(response.data.userId==0||response.data==""){
+            if (response.data.userId == 0 || response.data == "") {
               console.log("login failed");
               alert("请输入正确的用户名或密码！")
-            }else{
+            } else {
               _this.$router.push({
-              name:`Home`,
-              params: {userId:response.data.userId}
+                name: `Home`,
+                params: {
+                  userId: response.data.userId
+                }
               });
-        
+
             }
-          }).catch(function (error) {
+          }).catch(function(error) {
             console.log(error);
-            })
+          })
         })
       },
     },
