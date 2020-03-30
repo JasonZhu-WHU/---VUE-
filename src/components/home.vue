@@ -5,7 +5,7 @@
         <a-icon type="project" />
         书林Forests 后台管理系统
       </div>
-      <a-menu theme="dark" mode="horizontal" :defaultSelectedKeys="[]" :style="{ lineHeight: '64px', float: right}">
+      <a-menu @click="topBtnClicked" theme="dark" mode="horizontal" :defaultSelectedKeys="[]" :style="{ lineHeight: '64px'}">
         <a-menu-item key="1">使用帮助</a-menu-item>
         <a-menu-item key="2">问题反馈</a-menu-item>
         <a-menu-item key="3">关于我们</a-menu-item>
@@ -52,7 +52,7 @@
   export default {
     beforeCreate() {
       this.form = this.$form.createForm(this, {
-        name: 'normal_login'
+        name: 'home'
       });
       document.querySelector('body').setAttribute('style', 'background:#;')
     },
@@ -60,7 +60,8 @@
       return {
         collapsed: false,
         current: ['mail'],
-        openKeys: ['sub1'],
+        openKeys: [],
+        openTopBtns: [],
         theme: 'dark',
         mode: 'inline',
       };
@@ -104,6 +105,11 @@
       titleClick(e) {
         console.log('titleClick', e);
       },
+      //点击顶端标题
+      topBtnClicked(e){
+        console.log('top btn clicked', e);
+        this.$data.openTopBtns = [];
+      }
     },
     watch: {
       openKeys(val) {

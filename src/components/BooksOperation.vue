@@ -93,7 +93,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   export default {
     beforeCreate() {
       this.form = this.$form.createForm(this, {
@@ -101,23 +100,48 @@
       });
     },
     created() {
-      axios.get('/api/book', JSON.stringify({
-        category: null,
-        page: 0,
-        size: 15
-      })).then(function(response) {
-        console.log(response);
-      }).catch(function(error) {
-        console.log(error);
+      var _this = this;
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values)
+        }
+        console.log(_this.$axios)
+        console.log('init')
+        _this.axios.get('/api/book', {
+          params: {
+            category: null,
+            page: 0,
+            size: 15
+          }
+        }).then(function(response) {
+          var books = response.data.data;
+          console.log(books)
+        }).catch(function(error) {
+          console.log(error);
+        })
+
       })
     },
+
     data() {
       return {
 
       };
     },
     methods: {
-
+      onSearch(value) {
+        console.log('search')
+        console.log(value)
+        this.axios.get('/api/sale/', JSON.stringify({
+          category: null,
+          page: 0,
+          size: 15
+        })).then(function(response) {
+          console.log(response);
+        }).catch(function(error) {
+          console.log(error);
+        })
+      }
     },
     watch: {
 
