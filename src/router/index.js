@@ -5,6 +5,7 @@ import Login from '../components/login.vue'
 import Home from '../components/home.vue'
 import BooksOperation from '../views/BooksManagement/BooksOperation.vue'
 import BooksStatistics from '../views/BooksManagement/BooksStatistics.vue'
+import BookDetail from '../views/BooksManagement/BookDetail.vue'
 import SalesList from '../views/SalesManagement/SalesList.vue'
 import SalesStatistics from '../views/SalesManagement/SalesStatistics.vue'
 import axios from 'axios'
@@ -30,6 +31,11 @@ const routes = [{
         path: '/home/BooksStatistics',
         name: 'BooksStatistics',
         component: BooksStatistics
+      },
+      {
+        path: '/home/BookDetail',
+        name: 'BookDetail',
+        component: BookDetail
       },
       {
         path: '/home/SalesList',

@@ -4,70 +4,50 @@
     <a-input-search style="width: 80%;float: left;" placeholder="输入书籍搜索关键字" @search="onSearch" enterButton />
     <a-button @click="showDrawer" type="primary" style="float: right;">
       <a-icon type="plus" />添加书目</a-button>
-    <a-drawer title="添加新书目(书目上架)" :width="720" @close="onClose" :visible="visible" :bodyStyle="{paddingBottom: '80px'}">
+    <a-drawer title="添加新书目(书目上架)" :width="720" @close="cancel" :visible="visible" :bodyStyle="{paddingBottom: '80px'}">
       <a-form :form="form" layout="vertical" hideRequiredMark>
         <a-row :gutter="16">
           <a-col :span="12">
             <a-form-item label="书名">
-              <a-input v-decorator="['name', {
-                      rules: [{ required: true, message: 'Please enter user name' }]
-                    }]"
-                placeholder="请输入书名" />
+              <a-input v-model="title" placeholder="请输入书名" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="ISBN号">
-              <a-input v-decorator="['name', {
-                      rules: [{ required: true, message: 'Please enter user name' }]
-                    }]"
-                placeholder="请输入ISBN号" />
+              <a-input v-model="isbn" placeholder="请输入ISBN号" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
           <a-col :span="12">
-            <a-form-item label="价格(人民币¥)">
-              <a-input-number id="inputNumber" :min="0" style="width: 100%;" />
+            <a-form-item label="单品价格">
+              <a-input-number v-model="price" :min="0" style="width: 100%;" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="分类">
-              <a-select v-decorator="['type', {
-                      rules: [{ required: true, message: 'Please choose the type' }]
-                    }]"
-                placeholder="Please choose the type">
-                <a-select-option value="private">Private</a-select-option>
-                <a-select-option value="public">Public</a-select-option>
+            <a-form-item label="书籍分类">
+              <a-select @change="selectChanged" v-decorator="['type']" placeholder="请选择类型">
+                <a-select-option v-for="(item, index) in categories" :key="index">{{item.category}}</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
           <a-col :span="12">
-            <a-form-item label="作者">
-              <a-input v-decorator="['name', {
-                      rules: [{ required: true, message: 'Please enter user name' }]
-                    }]"
-                placeholder="请输入作者名字" />
+            <a-form-item label="书籍作者">
+              <a-input v-model="author" placeholder="请输入作者名字" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="上传书目图片">
-              <a-upload name="file" :multiple="true" action="https://www.mocky.io/v2/5cc8019d300000980a055e76" :headers="headers"
-                @change="handleChange">
-                <a-button>
-                  <a-icon type="upload" /> 点击上传书目图片 </a-button>
-              </a-upload>
+            <a-form-item label="书目图片URL">
+              <a-input v-model="coverUrl" placeholder="请输入图片URL" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
           <a-col :span="24">
-            <a-form-item label="简介">
-              <a-textarea v-decorator="['description', {
-                      rules: [{ required: true, message: 'Please enter url description' }]
-                    }]"
-                :rows="4" placeholder="请输入书籍简要介绍" />
+            <a-form-item label="书籍简介">
+              <a-textarea v-model="introduction" :rows="4" placeholder="请输入书籍简要介绍" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -83,10 +63,10 @@
               textAlign: 'right',
               zIndex: 1,
             }">
-        <a-button :style="{marginRight: '8px'}" @click="onClose">
+        <a-button :style="{marginRight: '8px'}" @click="cancel">
           Cancel
         </a-button>
-        <a-button @click="onClose" type="primary">Submit</a-button>
+        <a-button @click="submit" type="primary">Submit</a-button>
       </div>
     </a-drawer>
     <br /><br />
@@ -99,18 +79,18 @@
       <div v-for="(item, index) in row1_books" :key="index" :title="item.title">
         <a-col :span="8">
           <a-card :loading="loading" hoverable style="width: 300px">
-            <img alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
+            <img @click="toDetail(item.isbn)" alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
             <template class="ant-card-actions" slot="actions">
-              <a-button shape="circle" icon="info"></a-button>
-              <a-button shape="circle" icon="edit"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="info"></a-button>
+              <a-button @click="infoDeleteRow1" shape="circle" icon="edit"></a-button>
               <a-dropdown>
-                <a-menu slot="overlay" @click="handleMenuClick">
+                <a-menu slot="overlay" @click="handleMenuClickRow1">
                   <a-menu-item key="1">
-                    <a-icon type="user" />1st menu item</a-menu-item>
+                    <a-icon type="delete" />书目下架（删除）</a-menu-item>
                   <a-menu-item key="2">
-                    <a-icon type="user" />2nd menu item</a-menu-item>
+                    <a-icon type="pay-circle" />调整价格</a-menu-item>
                   <a-menu-item key="3">
-                    <a-icon type="user" />3rd item</a-menu-item>
+                    <a-icon type="rocket" />更多功能敬请期待</a-menu-item>
                 </a-menu>
                 <a-button style="margin-left: 8px"> More
                   <a-icon type="down" />
@@ -227,13 +207,16 @@
 
     },
     created() {
+      this.getCatgories();
       this.getBooks(1);
+      this.getTime();
     },
 
     data() {
       return {
         loading: true,
         spinning: true,
+        categories: [],
         current: 1,
         totalBooks: 15,
         totalPages: 5,
@@ -247,6 +230,16 @@
         headers: {
           authorization: 'authorization-text',
         },
+
+        //上传书籍（上架）
+        isbn: null,
+        title: null,
+        coverUrl: null,
+        price: null,
+        author: null,
+        uploadType: null,
+        introduction: null,
+        time: null,
       };
     },
     methods: {
@@ -293,10 +286,24 @@
           }
           _this.spinning = false;
           _this.loading = false;
-          console.log(_this.$data)
         }).catch(function(error) {
           console.log(error);
         })
+      },
+
+      getCatgories() {
+        var _this = this;
+        _this.axios.get('/api/category').then(function(response) {
+          console.log(response.data)
+          _this.categories = response.data;
+          console.log(_this.$data)
+        }).catch(function(error) {
+          console.log(error)
+        })
+      },
+
+      getTime() {
+        this.time = Date.parse(new Date());
       },
 
       onSearch(value) {
@@ -305,27 +312,84 @@
         console.log(self.row1_books)
       },
 
+      selectChanged(index) {
+        this.uploadType = this.categories[index].category;
+        console.log(this.uploadType)
+      },
+
+      handleMenuClick(menu) {
+        console.log(menu)
+      },
+      
+      handleMenuClickRow1(e){
+        console.log(e)
+      },
+      
+      infoClickRow1(e){
+        console.log(e)
+      },
+      deleteClickRow1(e){
+        console.log(e)
+      },
+
       //e即点击的页面数字
       pageChanged(e) {
         console.log(e)
         this.getBooks(e);
       },
 
+      //展示抽屉（书籍上架浮窗）
       showDrawer() {
         this.visible = true;
       },
-      onClose() {
-        this.visible = false;
+
+      //查看商品详情
+      toDetail(isbn){
+        this.$router.push({
+          name: 'BookDetail',
+          params: {
+            isbn: isbn
+          }
+        });
       },
-      handleChange(info) {
-        if (info.file.status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-          this.$message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-          this.$message.error(`${info.file.name} file upload failed.`);
-        }
+
+      //上架按钮点击
+      submit() {
+        this.axios.post('/api/book', {
+          isbn: this.isbn,
+          title: this.title,
+          coverUrl: this.coverUrl,
+          price: this.price,
+          introduction: this.introduction,
+          author: this.author,
+          category: this.uploadType,
+          time: this.time
+        }).then(function(response) {
+          console.log(response.data);
+          if (response.data) {
+            this.$message.success(
+              '书籍上架成功',
+              5,
+            );
+          }
+        }).catch(function(error) {
+          console.log(error);
+          this.$message.error('书籍上架出现错误', 5);
+        })
+      },
+
+      //放弃上架取消btn
+      cancel() {
+        this.visible = false;
+        this.$message.warning('书籍上架取消', 5);
+        console.log(this.title)
+        console.log(this.isbn)
+        console.log(this.price)
+        console.log(this.uploadType)
+        console.log(this.author)
+        console.log(this.coverUrl)
+        console.log(this.introduction)
+        console.log(this.time)
       },
     },
     watch: {
