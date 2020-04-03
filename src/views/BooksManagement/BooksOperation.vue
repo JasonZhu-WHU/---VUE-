@@ -360,6 +360,9 @@
           _this.loading = false;
         }).catch(function(error) {
           console.log(error)
+          _this.spinning = false;
+          _this.loading = false;
+          this.$message.error('书籍搜索出现错误', 5);
         })
       },
 
