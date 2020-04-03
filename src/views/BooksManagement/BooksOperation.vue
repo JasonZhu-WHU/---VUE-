@@ -306,10 +306,61 @@
         this.time = Date.parse(new Date());
       },
 
-      onSearch(value) {
+      //点击搜索或回车
+      onSearch(value, event) {
         console.log('search')
         console.log(value)
-        console.log(self.row1_books)
+        console.log(event)
+        var _this = this;
+        _this.spinning = true;
+        _this.loading = true;
+        _this.axios.get('/api/search', {
+          params:{
+            keyword: value,
+            order: "title",
+            lowestPrice: null,
+            highestPrice: null,
+            page: 0,
+            size: 15
+          }
+        }).then(function(response) {
+          var books = response.data.data;
+          var totalBooks = Number(response.data.totalElements);
+          var totalPages = Number(response.data.totalPages);
+          console.log(books);
+          _this.totalPages = totalPages;
+          _this.totalBooks = totalBooks;
+          var bookNum = books.length;
+          _this.row2_books = [];
+          _this.row3_books = [];
+          _this.row4_books = [];
+          _this.row5_books = [];
+          if (bookNum < 3) {
+            _this.row1_books = books;
+          } else if (bookNum < 6) {
+            _this.row1_books = books.slice(0, 3)
+            _this.row2_books = books.slice(3, bookNum)
+          } else if (bookNum < 9) {
+            _this.row1_books = books.slice(0, 3)
+            _this.row2_books = books.slice(3, 6)
+            _this.row3_books = books.slice(6, bookNum)
+          } else if (bookNum < 12) {
+            _this.row1_books = books.slice(0, 3)
+            _this.row2_books = books.slice(3, 6)
+            _this.row3_books = books.slice(6, 9)
+            _this.row4_books = books.slice(9, bookNum)
+          } else {
+            _this.row1_books = books.slice(0, 3)
+            _this.row2_books = books.slice(3, 6)
+            _this.row3_books = books.slice(6, 9)
+            _this.row4_books = books.slice(9, 12)
+            _this.row5_books = books.slice(12, bookNum)
+          }
+          _this.spinning = false;
+          _this.loading = false;
+        }).catch(function(error) {
+          console.log(error)
+        })
       },
 
       selectChanged(index) {
