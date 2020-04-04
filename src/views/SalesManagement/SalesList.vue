@@ -1,8 +1,30 @@
 <template>
   <div>
     <div>
-      <a-statistic title="本月订单数" :value="112893" style="margin-right: 50px; float: left;" />
-      <a-statistic title="本月交易额(CNY)" :precision="2" :value="112893" style="margin-right: 50px; float: left;" />
+      <a-row :gutter="16">
+        <a-col :span="4">
+          <a-statistic title="本月订单数" :value="112893" style="margin-right: 50px; float: left;" />
+        </a-col>
+        <a-col :span="4">
+          <a-statistic title="较上月" :value="11.28" :precision="2" suffix="%" :valueStyle="{color: '#3f8600'}" style="margin-right: 50px">
+            <template v-slot:prefix>
+              <a-icon type="arrow-up" />
+            </template>
+          </a-statistic>
+        </a-col>
+        <a-col :span="1">
+        </a-col>
+        <a-col :span="4.05">
+          <a-statistic title="本月交易额(CNY)" :precision="2" :value="112893" style="margin-right: 50px; float: left;" />
+        </a-col>
+        <a-col :span="4">
+          <a-statistic title="较上月" :value="9.3" :precision="2" suffix="%" valueClass="demo-class" :valueStyle="{ color: '#cf1322' }">
+            <template v-slot:prefix>
+              <a-icon type="arrow-down" />
+            </template>
+          </a-statistic>
+        </a-col>
+      </a-row>
     </div>
     <div style="padding-top: 40px;float: left;">
       <a-row type="flex" justify="center" align="middle">
@@ -33,7 +55,7 @@
         </a-col>
       </a-row>
     </div>
-    <div style="padding-top: 185px;"></div>
+    <div style="padding-top: 120px;"></div>
 
     <a-table :data-source="dataSource" :columns="columns" :loading="loading">
       <div slot="filterDropdown" slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }" style="padding: 8px">
@@ -71,15 +93,13 @@
     created() {
       this.getSales();
     },
-    mounted() {
-      this.getSales();
-    },
-    
+
     data() {
       return {
         loading: true,
         isbn: "",
         userId: null,
+        originalData: [],
         dataSource: [],
         searchText: '',
         searchInput: null,
@@ -204,10 +224,10 @@
       };
     },
     methods: {
-      getSales(){
+      getSales() {
         var _this = this;
         this.axios.get('/api/sale', {
-          params:{
+          params: {
             startTime: null,
             endTime: null,
             page: 0,
@@ -216,14 +236,15 @@
         }).then(function(response) {
           var array = response.data.data;
           console.log(array);
-          for(var i=0;i<array.length;i++){
+          _this.originalData = array;
+          for (var i = 0; i < array.length; i++) {
             _this.dataSource[i] = {
-              key: i+1,
+              key: i + 1,
               orderId: array[i].orderId,
               userId: array[i].userId,
               name: array[i].name,
               paidPrice: array[i].paidPrice,
-              time: array[i].time.slice(0,10),
+              time: array[i].time.slice(0, 10),
               status: array[i].status,
             }
           }
@@ -231,10 +252,10 @@
           console.log(_this.dataSource)
         }).catch(function(error) {
           console.log(error)
-          this.$message.error('订单获取出现错误', 5);
+          _this.$message.error('订单获取出现错误', 5);
         })
       },
-      
+
       timeChanged(date, dateString) {
         console.log(date, dateString);
       },
@@ -251,7 +272,15 @@
       },
 
       moreClicked(more) {
-        console.log(more)
+        var _this = this;
+        var index = more.key - 1;
+        console.log(this.originalData[index])
+        this.$router.push({
+          name: 'OrderDetail',
+          params: {
+            info: _this.originalData[index]
+          }
+        });
       },
     },
   };

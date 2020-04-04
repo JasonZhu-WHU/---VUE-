@@ -8,6 +8,7 @@ import BooksStatistics from '../views/BooksManagement/BooksStatistics.vue'
 import BookDetail from '../views/BooksManagement/BookDetail.vue'
 import SalesList from '../views/SalesManagement/SalesList.vue'
 import SalesStatistics from '../views/SalesManagement/SalesStatistics.vue'
+import OrderDetail from '../views/SalesManagement/OrderDetail.vue'
 import axios from 'axios'
 
 Vue.use(VueRouter)
@@ -46,7 +47,12 @@ const routes = [{
         path: '/home/SalesStatistics',
         name: 'SalesStatistics',
         component: SalesStatistics
-      }
+      },
+      {
+        path: '/home/OrderDetail',
+        name: 'OrderDetail',
+        component: OrderDetail
+      },
     ]
   },
   {
