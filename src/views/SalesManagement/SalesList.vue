@@ -3,24 +3,22 @@
     <div>
       <a-row :gutter="16">
         <a-col :span="4">
-          <a-statistic title="本月订单数" :value="112893" style="margin-right: 50px; float: left;" />
+          <a-statistic title="本月订单数" :value="orderNum" style="margin-right: 50px; float: left;" />
         </a-col>
-        <a-col :span="4">
-          <a-statistic title="较上月" :value="11.28" :precision="2" suffix="%" :valueStyle="{color: '#3f8600'}" style="margin-right: 50px">
+        <a-col :span="8">
+          <a-statistic title="较上月" :value="orderNumRatio" :precision="2" suffix="%" :valueStyle="{ color: '#3f8600' }" style="margin-right: 50px;">
             <template v-slot:prefix>
-              <a-icon type="arrow-up" />
+              <a-icon :type="num_arrow_type" />
             </template>
           </a-statistic>
         </a-col>
-        <a-col :span="1">
-        </a-col>
-        <a-col :span="4.05">
-          <a-statistic title="本月交易额(CNY)" :precision="2" :value="112893" style="margin-right: 50px; float: left;" />
+        <a-col :span="5">
+          <a-statistic title="本月交易额(CNY)" :precision="2" :value="orderVal" style="margin-right: 50px; float: left;" />
         </a-col>
         <a-col :span="4">
-          <a-statistic title="较上月" :value="9.3" :precision="2" suffix="%" valueClass="demo-class" :valueStyle="{ color: '#cf1322' }">
+          <a-statistic title="较上月" :value="orderValRatio" :precision="2" suffix="%" valueClass="demo-class" :valueStyle="{ color: '#3f8600' }">
             <template v-slot:prefix>
-              <a-icon type="arrow-down" />
+              <a-icon :type="val_arrow_type" />
             </template>
           </a-statistic>
         </a-col>
@@ -91,6 +89,7 @@
       });
     },
     created() {
+      this.getStatistics();
       this.getSales();
     },
 
@@ -221,6 +220,13 @@
             },
           },
         ],
+        orderNum: 0,
+        orderNumRatio: 0,
+        orderVal: 0,
+        orderValRatio: 0,
+        num_arrow_type: "arrow-up",
+        val_arrow_type: "arrow-up",
+        color: 'cf1322'
       };
     },
     methods: {
@@ -253,6 +259,38 @@
         }).catch(function(error) {
           console.log(error)
           _this.$message.error('订单获取出现错误', 5);
+        })
+      },
+      
+      getStatistics(){
+        var _this = this;
+        var time = new Date();
+        var timestamp = time.getTime(time)
+        this.axios.get('/api/analysis/mom', {
+          params: {
+            time: timestamp
+          }
+        }).then(function(response) {
+          console.log(response.data);
+          _this.orderNum = response.data.number;
+          _this.orderNumRatio = response.data.numRatio;
+          if(response.data.numRatio == 0){
+            _this.orderNumRatio= 100
+          }
+          else if(response.data.amountRatio < 0){
+            _this.num_arrow_type = "arrow-down"
+          }
+          _this.orderVal = response.data.amount;
+          _this.orderValRatio = response.data.amountRatio;
+          if(response.data.amountRatio == 0){
+            _this.orderValRatio= 100
+          }
+          else if(response.data.amountRatio < 0){
+            _this.val_arrow_type = "arrow-down"
+          }
+        }).catch(function(error) {
+          console.log(error)
+          _this.$message.error('Statistics比例获取出现错误', 5);
         })
       },
 
