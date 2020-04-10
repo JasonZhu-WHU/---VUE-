@@ -1,32 +1,58 @@
 <template>
   <div>
-    <a-row :gutter="16">
-      <a-col class="gutter-row" :span="6">
-        <h1>销售数据分析</h1>
-      </a-col>
-      <a-col class="gutter-row" :span="6">
-        
-      </a-col>
-      <a-col class="gutter-row" :span="6">
-        <a-select defaultValue="lucy" style="width: 120px" @change="handleChange">
-          <a-select-option value="jack">Jack</a-select-option>
-          <a-select-option value="lucy">Lucy</a-select-option>
-          <a-select-option value="disabled">Disabled</a-select-option>
-          <a-select-option value="Yiminghe">yiminghe</a-select-option>
+    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="销售数据分析" subTitle="based on Echarts">
+      <template slot="extra">
+        <a-select placeholder="选取查询数据" style="width: 150px" @change="chartChange">
+          <a-select-option value="pie">销售来源分析</a-select-option>
+          <a-select-option value="line">销售趋势分析</a-select-option>
         </a-select>
+        <a-range-picker @change="timeUpdated" format="YYYY-MM-DD"/>
+      </template>
+      <a-row :gutter="16">
+        <a-col :span="4">
+          <a-statistic title="本月订单数" :value="orderNum" style="margin-right: 50px; float: left;" />
+        </a-col>
+        <a-col :span="8">
+          <a-statistic title="较上月" :value="orderNumRatio" :precision="2" suffix="%" :valueStyle="{ color: '#3f8600' }"
+            style="margin-right: 50px;">
+            <template v-slot:prefix>
+              <a-icon :type="num_arrow_type" />
+            </template>
+          </a-statistic>
+        </a-col>
+        <a-col :span="5">
+          <a-statistic title="本月交易额(CNY)" :precision="2" :value="orderVal" style="margin-right: 50px; float: left;" />
+        </a-col>
+        <a-col :span="4">
+          <a-statistic title="较上月" :value="orderValRatio" :precision="2" suffix="%" valueClass="demo-class" :valueStyle="{ color: '#3f8600' }">
+            <template v-slot:prefix>
+              <a-icon :type="val_arrow_type" />
+            </template>
+          </a-statistic>
+        </a-col>
+      </a-row>
+    </a-page-header>
+    <br />
+
+    <div style="padding-top: 40px;"></div>
+
+    <a-row type="flex">
+      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="10">
+        <div id="myChart" :style="{width: '400px', height: '400px'}"></div>
       </a-col>
-      <a-col class="gutter-row" :span="6">
-        <a-select defaultValue="lucy" style="width: 120px" @change="handleChange">
-          <a-select-option value="jack">Jack</a-select-option>
-          <a-select-option value="lucy">Lucy</a-select-option>
-          <a-select-option value="disabled">Disabled</a-select-option>
-          <a-select-option value="Yiminghe">yiminghe</a-select-option>
-        </a-select>
+      <a-col :xs="10" :sm="8" :md="6" :lg="4" :xl="2"> </a-col>
+      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="10">
+        <a-list itemLayout="horizontal" :dataSource="data">
+          <a-list-item slot="renderItem" slot-scope="item">
+            <a-list-item-meta description="Ant Design, a design language for background applications, is refined by Ant UED Team">
+              <a slot="title" href="https://www.antdv.com/">{{item.title}}</a>
+              <a-avatar slot="avatar" style="backgroundColor:#87d068" icon="solution" />
+            </a-list-item-meta>
+          </a-list-item>
+        </a-list>
       </a-col>
     </a-row>
-    <a-row></a-row>
-    <div style="padding-top: 20px;"></div>
-    <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
+
   </div>
 </template>
 
@@ -34,129 +60,151 @@
   // 引入基本模板
   let echarts = require('echarts/lib/echarts')
   // 引入柱状图组件
-  require('echarts/lib/chart/bar')
+  require('echarts/lib/chart/pie')
   // 引入提示框和title组件
   require('echarts/lib/component/tooltip')
   require('echarts/lib/component/title')
-
+  const data = [{
+      title: 'Ant Design Title 1',
+    },
+    {
+      title: 'Ant Design Title 2',
+    },
+    {
+      title: 'Ant Design Title 3',
+    },
+    {
+      title: 'Ant Design Title 4',
+    },
+  ];
   export default {
     data() {
       return {
-
+        startDate: null,
+        endDate: null,
+        orderNum: 0,
+        orderNumRatio: 0,
+        orderVal: 0,
+        orderValRatio: 0,
+        num_arrow_type: "arrow-up",
+        val_arrow_type: "arrow-up",
+        color: 'cf1322',
+        data,
       }
     },
+    created() {
+      this.getStatistics();
+      // this.getChartData();
+    },
     mounted() {
-      this.$nextTick(() => {
-        this.drawLine();
-      });
-      // this.drawPieChart()
+      this.drawPieChart();
     },
     methods: {
-      drawLine() {
-        console.log("myChart")
-        // 基于准备好的dom，初始化echarts实例
-        let myChart = echarts.init(document.getElementById('myChart'))
-        console.log(myChart)
-        // 绘制图表
-        myChart.setOption({
-          title: {
-            text: '在Vue中使用echarts'
-          },
-          tooltip: {},
-          xAxis: {
-            data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-          },
-          yAxis: {},
-          series: [{
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-          }]
-        });
-        console.log(myChart)
-      },
       drawPieChart() {
         // 基于准备好的dom，初始化echarts实例
-        let pieChart = echarts.init(document.getElementById('pieChart'))
-        // 绘制图表
-        pieChart.setOption({
-          backgroundColor: '#2c343c',
-          title: {
-            text: 'Customized Pie',
-            left: 'center',
-            top: 20,
-            textStyle: {
-              color: '#ccc'
-            }
-          },
+        let myChart = echarts.init(document.getElementById('myChart'))
 
-          tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
-          },
-
-          visualMap: {
-            show: false,
-            min: 80,
-            max: 600,
-            inRange: {
-              colorLightness: [0, 1]
+        var _this = this;
+        this.axios.get('/api/analysis/category', {
+          params: {
+            startTime: _this.startDate,
+            endTime: _this.endDate,
+          }
+        }).then(function(response) {
+          var array = response.data;
+          console.log(array);
+          var types = [];
+          var chartData = [];
+          for (var i = 0; i < array.length; i++) {
+            types[i] = array[i].category;
+            chartData[i] = {
+              value: array[i].money,
+              name: array[i].category,
             }
-          },
-          series: [{
-            name: '访问来源',
-            type: 'pie',
-            radius: '55%',
-            center: ['50%', '50%'],
-            data: [{
-                value: 335,
-                name: '直接访问'
-              },
-              {
-                value: 310,
-                name: '邮件营销'
-              },
-              {
-                value: 274,
-                name: '联盟广告'
-              },
-              {
-                value: 235,
-                name: '视频广告'
-              },
-              {
-                value: 400,
-                name: '搜索引擎'
+          }
+          // 绘制图表
+          myChart.setOption({
+            backgroundColor: '#fff',
+            title: {
+              text: '销售数据分析',
+              subtext: '营业收入来源细分',
+              left: 'center'
+            },
+            tooltip: {
+              trigger: 'item',
+              formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+              orient: 'vertical',
+              left: 'left',
+              data: types,
+            },
+            series: [{
+              name: '销售额占比',
+              type: 'pie',
+              radius: '55%',
+              center: ['50%', '60%'],
+              data: chartData,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
               }
-            ].sort(function(a, b) {
-              return a.value - b.value;
-            }),
-            roseType: 'radius',
-            label: {
-              color: 'rgba(255, 255, 255, 0.3)'
-            },
-            labelLine: {
-              lineStyle: {
-                color: 'rgba(255, 255, 255, 0.3)'
-              },
-              smooth: 0.2,
-              length: 10,
-              length2: 20
-            },
-            itemStyle: {
-              color: '#c23531',
-              shadowBlur: 200,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            },
-
-            animationType: 'scale',
-            animationEasing: 'elasticOut',
-            animationDelay: function(idx) {
-              console.log(idx)
-              return Math.random() * 200;
-            }
-          }]
+            }]
+          });
+          console.log(myChart)
+        }).catch(function(error) {
+          console.log(error)
+          _this.$message.error('图表数据获取出现错误', 5);
         })
+      },
+
+      getStatistics() {
+        var _this = this;
+        var time = new Date();
+        var timestamp = time.getTime(time)
+        this.axios.get('/api/analysis/mom', {
+          params: {
+            time: timestamp
+          }
+        }).then(function(response) {
+          console.log(response.data);
+          _this.orderNum = response.data.number;
+          _this.orderNumRatio = response.data.numRatio;
+          if (response.data.numRatio == 0) {
+            _this.orderNumRatio = 100
+          } else if (response.data.amountRatio < 0) {
+            _this.num_arrow_type = "arrow-down"
+          }
+          _this.orderVal = response.data.amount;
+          _this.orderValRatio = response.data.amountRatio;
+          if (response.data.amountRatio == 0) {
+            _this.orderValRatio = 100
+          } else if (response.data.amountRatio < 0) {
+            _this.val_arrow_type = "arrow-down"
+          }
+        }).catch(function(error) {
+          console.log(error)
+          _this.$message.error('Statistics比例获取出现错误', 5);
+        })
+      },
+
+      chartChange(e) {
+        console.log(e)
+        if (e == "pie") {
+          console.log("pie")
+        }
+      },
+
+      timeUpdated(value,dateString) {
+        console.log(value)
+        console.log(dateString)
+        console.log(this.startDate)
+        this.startDate = Date.parse(dateString[0] + " 00:00:00")
+        this.endDate = Date.parse(dateString[1] + " 23:59:59")
+        this.drawPieChart()
       }
     }
   }

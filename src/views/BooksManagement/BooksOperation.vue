@@ -84,20 +84,27 @@
               <a-button @click="toDetail(item.isbn)" shape="circle" icon="info"></a-button>
               <a-button @click="infoDeleteRow1" shape="circle" icon="edit"></a-button>
               <a-dropdown>
-                <a-menu slot="overlay" @click="handleMenuClickRow1">
+                <a-menu slot="overlay" @click="handleMenuClick" @openChange="openMenu(item)">
                   <a-menu-item key="1">
                     <a-icon type="delete" />书目下架（删除）</a-menu-item>
                   <a-menu-item key="2">
                     <a-icon type="pay-circle" />调整价格</a-menu-item>
                   <a-menu-item key="3">
                     <a-icon type="rocket" />更多功能敬请期待</a-menu-item>
+                  
                 </a-menu>
+
                 <a-button style="margin-left: 8px"> More
                   <a-icon type="down" />
                 </a-button>
+
               </a-dropdown>
             </template>
-            <a-card-meta :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
+            <a-modal title="价格调整" v-model="modalVisible" @ok="modalOK" @cancel="modalCancel">
+              <p>请输入您想设置的新价格：</p>
+              <a-input prefix="￥" suffix="RMB" v-model="newPrice" />
+            </a-modal>
+            <a-card-meta :loading="loading" :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
             </a-card-meta>
           </a-card>
         </a-col>
@@ -227,9 +234,15 @@
         row5_books: [],
         form: this.$form.createForm(this),
         visible: false,
+        modalVisible: false,
         headers: {
           authorization: 'authorization-text',
         },
+
+        //正在操作的card的下拉菜单对应的书的isbn
+        isbnOperating: null,
+        //调整价格的input绑定输入
+        newPrice: null,
 
         //上传书籍（上架）
         isbn: null,
@@ -315,7 +328,7 @@
         _this.spinning = true;
         _this.loading = true;
         _this.axios.get('/api/search', {
-          params:{
+          params: {
             keyword: value,
             order: "title",
             lowestPrice: null,
@@ -371,18 +384,60 @@
         console.log(this.uploadType)
       },
 
-      handleMenuClick(menu) {
-        console.log(menu)
+      //打开了某个card的下拉菜单
+      openMenu(item) {
+        console.log(item.isbn)
+        this.isbnOperating = item.isbn
+      },
+
+      //点击了下拉菜单的某个选项
+      handleMenuClick(e) {
+        console.log(e.key)
+        if (this.isbnOperating) {
+          //书籍下架
+          if (e.key == "1") {
+            this.deleteBook(this.isbnOperating)
+          }
+          //调整价格
+          else if (e.key == "2") {
+            this.adjustPrice(this.isbnOperating)
+          }
+          //
+          else {
+            this.$message.info('更多功能敬请期待', 5);
+          }
+        } else {
+          this.$message.error('下拉菜单出现商品选取错误', 5);
+        }
+      },
+
+      adjustPrice(isbn) {
+        console.log(isbn)
+        this.modalVisible = true;
+      },
+
+      modalOK(e) {
+        console.log(e);
+        this.modalVisible = false;
+        console.log(this.newPrice)
+        this.$message.success('成功调整价格至'+this.newPrice+"元");
       },
       
-      handleMenuClickRow1(e){
+      modalCancel(e) {
+        console.log(e);
+        this.modalVisible = false;
+        this.$message.warning('放弃调整价格');
+        console.log(this.modalVisible)
+      },
+
+      deleteBook(isbn) {
+        console.log(isbn)
+      },
+
+      infoClickRow1(e) {
         console.log(e)
       },
-      
-      infoClickRow1(e){
-        console.log(e)
-      },
-      deleteClickRow1(e){
+      deleteClickRow1(e) {
         console.log(e)
       },
 
@@ -398,7 +453,7 @@
       },
 
       //查看商品详情
-      toDetail(isbn){
+      toDetail(isbn) {
         this.$router.push({
           name: 'BookDetail',
           params: {

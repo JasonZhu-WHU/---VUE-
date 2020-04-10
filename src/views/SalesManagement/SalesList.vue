@@ -25,31 +25,20 @@
       </a-row>
     </div>
     <div style="padding-top: 40px;float: left;">
-      <a-row type="flex" justify="center" align="middle">
-        <a-col :span="7">
+      <a-row>
+        <a-col :span="10">
           <p style="float: left;">查询某段时间的订单</p>
-          <a-range-picker @change="timeChanged" style="float: left; width: 80%;" />
+          <a-range-picker @change="timeUpdated" format="YYYY-MM-DD"  style="float: left; width: 80%;" />
         </a-col>
         <a-col :span="7">
           <p style="float: left;">查询特定用户的订单</p>
-          <a-input placeholder="输入用户id" v-model="userId" style="float: left;width: 80%;">
-            <a-icon slot="prefix" type="user" />
-            <a-tooltip slot="suffix" title="请输入用户id">
-              <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
-            </a-tooltip>
-          </a-input>
+          <a-input-search @search="userIdUpdated" enterButton placeholder="输入用户id" v-model="userId" style="float: left;width: 80%;">
+          </a-input-search>
         </a-col>
         <a-col :span="7">
           <p style="float: left;">查询特定书籍的订单</p>
-          <a-input placeholder="输入书籍isbn码" v-model="isbn" style="float: left;width: 80%;">
-            <a-icon slot="prefix" type="book" />
-            <a-tooltip slot="suffix" title="输入书籍isbn码">
-              <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
-            </a-tooltip>
-          </a-input>
-        </a-col>
-        <a-col :span="3">
-          <a-button type="default" size="large" style="float: right;">查询订单</a-button>
+          <a-input-search @search="isbnUpdated" enterButton placeholder="输入书籍isbn码" v-model="isbn" style="float: left;width: 80%;">
+          </a-input-search>
         </a-col>
       </a-row>
     </div>
@@ -103,6 +92,8 @@
         searchText: '',
         searchInput: null,
         searchedColumn: '',
+        startDate: null,
+        endDate: null,
         columns: [{
             title: '订单id',
             dataIndex: 'orderId',
@@ -231,35 +222,101 @@
     },
     methods: {
       getSales() {
+        this.loading = true;
         var _this = this;
-        this.axios.get('/api/sale', {
-          params: {
-            startTime: null,
-            endTime: null,
-            page: 0,
-            size: 30
-          }
-        }).then(function(response) {
-          var array = response.data.data;
-          console.log(array);
-          _this.originalData = array;
-          for (var i = 0; i < array.length; i++) {
-            _this.dataSource[i] = {
-              key: i + 1,
-              orderId: array[i].orderId,
-              userId: array[i].userId,
-              name: array[i].name,
-              paidPrice: array[i].paidPrice,
-              time: array[i].time.slice(0, 10),
-              status: array[i].status,
+        if(this.userId){
+          this.axios.get('/api/sale/user/'+_this.userId, {
+            params: {
+              startTime: _this.startDate,
+              endTime: _this.endDate,
+              page: 0,
+              size: 30
             }
-          }
-          _this.loading = false;
-          console.log(_this.dataSource)
-        }).catch(function(error) {
-          console.log(error)
-          _this.$message.error('订单获取出现错误', 5);
-        })
+          }).then(function(response) {
+            var array = response.data.data;
+            console.log(array);
+            _this.originalData = array;
+            _this.dataSource = []
+            for (var i = 0; i < array.length; i++) {
+              _this.dataSource[i] = {
+                key: i + 1,
+                orderId: array[i].orderId,
+                userId: array[i].userId,
+                name: array[i].name,
+                paidPrice: array[i].paidPrice,
+                time: array[i].time.slice(0, 10),
+                status: array[i].status,
+              }
+            }
+            _this.loading = false;
+            console.log(_this.dataSource)
+          }).catch(function(error) {
+            console.log(error)
+            _this.$message.error('订单获取出现错误', 5);
+          })
+        }
+        else if(this.isbn){
+          this.axios.get('/api/sale/book/'+_this.isbn, {
+            params: {
+              startTime: _this.startDate,
+              endTime: _this.endDate,
+              page: 0,
+              size: 30
+            }
+          }).then(function(response) {
+            var array = response.data.data;
+            console.log(array);
+            _this.originalData = array;
+            _this.dataSource = []
+            for (var i = 0; i < array.length; i++) {
+              _this.dataSource[i] = {
+                key: i + 1,
+                orderId: array[i].orderId,
+                userId: array[i].userId,
+                name: array[i].name,
+                paidPrice: array[i].paidPrice,
+                time: array[i].time.slice(0, 10),
+                status: array[i].status,
+              }
+            }
+            _this.loading = false;
+            console.log(_this.dataSource)
+          }).catch(function(error) {
+            console.log(error)
+            _this.$message.error('订单获取出现错误', 5);
+          })
+        }
+        else{
+          this.axios.get('/api/sale', {
+            params: {
+              startTime: _this.startDate,
+              endTime: _this.endDate,
+              page: 0,
+              size: 30
+            }
+          }).then(function(response) {
+            var array = response.data.data;
+            console.log(array);
+            _this.originalData = array;
+            _this.dataSource = []
+            for (var i = 0; i < array.length; i++) {
+              _this.dataSource[i] = {
+                key: i + 1,
+                orderId: array[i].orderId,
+                userId: array[i].userId,
+                name: array[i].name,
+                paidPrice: array[i].paidPrice,
+                time: array[i].time.slice(0, 10),
+                status: array[i].status,
+              }
+            }
+            _this.loading = false;
+            console.log(_this.dataSource)
+          }).catch(function(error) {
+            console.log(error)
+            _this.$message.error('订单获取出现错误', 5);
+          })
+        }
       },
       
       getStatistics(){
@@ -294,8 +351,23 @@
         })
       },
 
-      timeChanged(date, dateString) {
+      timeUpdated(date, dateString) {
         console.log(date, dateString);
+        this.startDate = Date.parse(dateString[0] + " 00:00:00")
+        this.endDate = Date.parse(dateString[1] + " 23:59:59")
+        this.getSales()
+      },
+      
+      userIdUpdated(value, event) {
+        console.log(value, event);
+        this.userId = value;
+        this.getSales()
+      },
+      
+      isbnUpdated(value, event) {
+        console.log(value, event);
+        this.isbn = value;
+        this.getSales()
       },
 
       handleSearch(selectedKeys, confirm, dataIndex) {
