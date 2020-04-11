@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HelloWorld from '../components/HelloWorld'
 import Login from '../components/login.vue'
 import Home from '../components/home.vue'
 import BooksOperation from '../views/BooksManagement/BooksOperation.vue'
-import BooksStatistics from '../views/BooksManagement/BooksStatistics.vue'
+import CategoryManagement from '../views/BooksManagement/CategoryManagement.vue'
 import BookDetail from '../views/BooksManagement/BookDetail.vue'
 import SalesList from '../views/SalesManagement/SalesList.vue'
 import SalesStatistics from '../views/SalesManagement/SalesStatistics.vue'
 import OrderDetail from '../views/SalesManagement/OrderDetail.vue'
+import Manager from '../views/WebsiteManagement/Manager.vue'
+import Swiper from '../views/WebsiteManagement/Swiper.vue'
 import axios from 'axios'
 
 Vue.use(VueRouter)
@@ -29,9 +30,9 @@ const routes = [{
         component: BooksOperation
       },
       {
-        path: '/home/BooksStatistics',
-        name: 'BooksStatistics',
-        component: BooksStatistics
+        path: '/home/CategoryManagement',
+        name: 'CategoryManagement',
+        component: CategoryManagement
       },
       {
         path: '/home/BookDetail',
@@ -53,22 +54,17 @@ const routes = [{
         name: 'OrderDetail',
         component: OrderDetail
       },
+      {
+        path: '/home/Manager',
+        name: 'Manager',
+        component: Manager
+      },
+      {
+        path: '/home/Swiper',
+        name: 'Swiper',
+        component: Swiper
+      },
     ]
-  },
-  {
-    path: '/BooksOperation',
-    name: 'BooksOperation',
-    component: BooksOperation
-  },
-  {
-    path: '/BooksStatistics',
-    name: 'BooksStatistics',
-    component: BooksStatistics
-  },
-  {
-    path: '/HelloWorld',
-    name: 'HelloWorld',
-    component: HelloWorld
   },
 ]
 

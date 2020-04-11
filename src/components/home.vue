@@ -23,7 +23,7 @@
             <span slot="title">
               <a-icon type="book" /><span>书目管理</span></span>
             <a-menu-item key="书目操作">书目操作</a-menu-item>
-            <a-menu-item key="书目统计">书目统计</a-menu-item>
+            <a-menu-item key="分类管理">分类管理</a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub2" @titleClick="titleClick">
             <span slot="title">
@@ -33,8 +33,9 @@
           </a-sub-menu>
           <a-sub-menu key="sub4">
             <span slot="title">
-              <a-icon type="user" /><span>商家管理</span></span>
+              <a-icon type="user" /><span>网站管理</span></span>
             <a-menu-item key="设置管理员">设置管理员</a-menu-item>
+            <a-menu-item key="调整轮播图">调整轮播图</a-menu-item>
           </a-sub-menu>
         </a-menu>
       </a-layout-sider>
@@ -78,9 +79,9 @@
               
             }
           });
-        } else if (e.key == "书目统计") {
+        } else if (e.key == "分类管理") {
           _this.$router.push({
-            name: 'BooksStatistics',
+            name: 'CategoryManagement',
             params: {
 
             }
@@ -95,6 +96,20 @@
         } else if (e.key == "销售分析") {
           _this.$router.push({
             name: 'SalesStatistics',
+            params: {
+
+            }
+          });
+        } else if (e.key == "设置管理员") {
+          _this.$router.push({
+            name: 'Manager',
+            params: {
+
+            }
+          });
+        } else if (e.key == "调整轮播图") {
+          _this.$router.push({
+            name: 'Swiper',
             params: {
 
             }

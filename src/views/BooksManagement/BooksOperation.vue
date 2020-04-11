@@ -464,6 +464,7 @@
 
       //上架按钮点击
       submit() {
+        var _this = this;
         this.axios.post('/api/book', {
           isbn: this.isbn,
           title: this.title,
@@ -476,14 +477,14 @@
         }).then(function(response) {
           console.log(response.data);
           if (response.data) {
-            this.$message.success(
+            _this.$message.success(
               '书籍上架成功',
               5,
             );
           }
         }).catch(function(error) {
           console.log(error);
-          this.$message.error('书籍上架出现错误', 5);
+          _this.$message.error('书籍上架出现错误', 5);
         })
       },
 
