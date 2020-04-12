@@ -30,6 +30,7 @@
               <a-icon type="account-book" /><span>销售管理</span></span>
             <a-menu-item key="订单管理">订单管理</a-menu-item>
             <a-menu-item key="销售分析">销售分析</a-menu-item>
+            <a-menu-item key="促销设置">促销设置</a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub4">
             <span slot="title">
@@ -110,6 +111,13 @@
         } else if (e.key == "调整轮播图") {
           _this.$router.push({
             name: 'Swiper',
+            params: {
+              
+            }
+          });
+        } else if (e.key == "促销设置") {
+          _this.$router.push({
+            name: 'Discount',
             params: {
 
             }

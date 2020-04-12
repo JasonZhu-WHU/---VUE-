@@ -8,6 +8,7 @@ import BookDetail from '../views/BooksManagement/BookDetail.vue'
 import SalesList from '../views/SalesManagement/SalesList.vue'
 import SalesStatistics from '../views/SalesManagement/SalesStatistics.vue'
 import OrderDetail from '../views/SalesManagement/OrderDetail.vue'
+import Discount from '../views/SalesManagement/Discount.vue'
 import Manager from '../views/WebsiteManagement/Manager.vue'
 import Swiper from '../views/WebsiteManagement/Swiper.vue'
 import axios from 'axios'
@@ -53,6 +54,11 @@ const routes = [{
         path: '/home/OrderDetail',
         name: 'OrderDetail',
         component: OrderDetail
+      },
+      {
+        path: '/home/Discount',
+        name: 'Discount',
+        component: Discount
       },
       {
         path: '/home/Manager',
