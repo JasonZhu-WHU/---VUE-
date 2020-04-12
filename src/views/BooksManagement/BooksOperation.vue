@@ -82,7 +82,7 @@
             <img @click="toDetail(item.isbn)" alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
             <template class="ant-card-actions" slot="actions">
               <a-button @click="toDetail(item.isbn)" shape="circle" icon="info"></a-button>
-              <a-button @click="infoDeleteRow1" shape="circle" icon="edit"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="edit"></a-button>
               <a-dropdown>
                 <a-menu slot="overlay" @click="handleMenuClick" @openChange="openMenu(item)">
                   <a-menu-item key="1">
@@ -91,7 +91,6 @@
                     <a-icon type="pay-circle" />调整价格</a-menu-item>
                   <a-menu-item key="3">
                     <a-icon type="rocket" />更多功能敬请期待</a-menu-item>
-                  
                 </a-menu>
 
                 <a-button style="margin-left: 8px"> More
@@ -100,6 +99,9 @@
 
               </a-dropdown>
             </template>
+            <a-modal title="下架" :visible="popVisible" @ok="handleOk" :confirmLoading="confirmLoading" @cancel="handleCancel">
+              <p>您确认要下架这本书吗？</p>
+            </a-modal>
             <a-modal title="价格调整" v-model="modalVisible" @ok="modalOK" @cancel="modalCancel">
               <p>请输入您想设置的新价格：</p>
               <a-input prefix="￥" suffix="RMB" v-model="newPrice" />
@@ -119,13 +121,34 @@
       <div v-for="(item, index) in row2_books" :key="index" :title="item.title">
         <a-col :span="8">
           <a-card :loading="loading" hoverable style="width: 300px">
-            <img alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
+            <img @click="toDetail(item.isbn)" alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
             <template class="ant-card-actions" slot="actions">
-              <a-button shape="circle" icon="setting"></a-button>
-              <a-button shape="circle" icon="edit"></a-button>
-              <a-button shape="circle" icon="ellipsis"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="info"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="edit"></a-button>
+              <a-dropdown>
+                <a-menu slot="overlay" @click="handleMenuClick" @openChange="openMenu(item)">
+                  <a-menu-item key="1">
+                    <a-icon type="delete" />书目下架（删除）</a-menu-item>
+                  <a-menu-item key="2">
+                    <a-icon type="pay-circle" />调整价格</a-menu-item>
+                  <a-menu-item key="3">
+                    <a-icon type="rocket" />更多功能敬请期待</a-menu-item>
+                </a-menu>
+    
+                <a-button style="margin-left: 8px"> More
+                  <a-icon type="down" />
+                </a-button>
+    
+              </a-dropdown>
             </template>
-            <a-card-meta :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
+            <a-modal title="下架" :visible="popVisible" @ok="handleOk" :confirmLoading="confirmLoading" @cancel="handleCancel">
+              <p>您确认要下架这本书吗？</p>
+            </a-modal>
+            <a-modal title="价格调整" v-model="modalVisible" @ok="modalOK" @cancel="modalCancel">
+              <p>请输入您想设置的新价格：</p>
+              <a-input prefix="￥" suffix="RMB" v-model="newPrice" />
+            </a-modal>
+            <a-card-meta :loading="loading" :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
             </a-card-meta>
           </a-card>
         </a-col>
@@ -140,13 +163,34 @@
       <div v-for="(item, index) in row3_books" :key="index" :title="item.title">
         <a-col :span="8">
           <a-card :loading="loading" hoverable style="width: 300px">
-            <img alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
+            <img @click="toDetail(item.isbn)" alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
             <template class="ant-card-actions" slot="actions">
-              <a-button shape="circle" icon="setting"></a-button>
-              <a-button shape="circle" icon="edit"></a-button>
-              <a-button shape="circle" icon="ellipsis"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="info"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="edit"></a-button>
+              <a-dropdown>
+                <a-menu slot="overlay" @click="handleMenuClick" @openChange="openMenu(item)">
+                  <a-menu-item key="1">
+                    <a-icon type="delete" />书目下架（删除）</a-menu-item>
+                  <a-menu-item key="2">
+                    <a-icon type="pay-circle" />调整价格</a-menu-item>
+                  <a-menu-item key="3">
+                    <a-icon type="rocket" />更多功能敬请期待</a-menu-item>
+                </a-menu>
+    
+                <a-button style="margin-left: 8px"> More
+                  <a-icon type="down" />
+                </a-button>
+    
+              </a-dropdown>
             </template>
-            <a-card-meta :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
+            <a-modal title="下架" :visible="popVisible" @ok="handleOk" :confirmLoading="confirmLoading" @cancel="handleCancel">
+              <p>您确认要下架这本书吗？</p>
+            </a-modal>
+            <a-modal title="价格调整" v-model="modalVisible" @ok="modalOK" @cancel="modalCancel">
+              <p>请输入您想设置的新价格：</p>
+              <a-input prefix="￥" suffix="RMB" v-model="newPrice" />
+            </a-modal>
+            <a-card-meta :loading="loading" :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
             </a-card-meta>
           </a-card>
         </a-col>
@@ -161,13 +205,34 @@
       <div v-for="(item, index) in row4_books" :key="index" :title="item.title">
         <a-col :span="8">
           <a-card :loading="loading" hoverable style="width: 300px">
-            <img alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
+            <img @click="toDetail(item.isbn)" alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
             <template class="ant-card-actions" slot="actions">
-              <a-button shape="circle" icon="setting"></a-button>
-              <a-button shape="circle" icon="edit"></a-button>
-              <a-button shape="circle" icon="ellipsis"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="info"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="edit"></a-button>
+              <a-dropdown>
+                <a-menu slot="overlay" @click="handleMenuClick" @openChange="openMenu(item)">
+                  <a-menu-item key="1">
+                    <a-icon type="delete" />书目下架（删除）</a-menu-item>
+                  <a-menu-item key="2">
+                    <a-icon type="pay-circle" />调整价格</a-menu-item>
+                  <a-menu-item key="3">
+                    <a-icon type="rocket" />更多功能敬请期待</a-menu-item>
+                </a-menu>
+    
+                <a-button style="margin-left: 8px"> More
+                  <a-icon type="down" />
+                </a-button>
+    
+              </a-dropdown>
             </template>
-            <a-card-meta :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
+            <a-modal title="下架" :visible="popVisible" @ok="handleOk" :confirmLoading="confirmLoading" @cancel="handleCancel">
+              <p>您确认要下架这本书吗？</p>
+            </a-modal>
+            <a-modal title="价格调整" v-model="modalVisible" @ok="modalOK" @cancel="modalCancel">
+              <p>请输入您想设置的新价格：</p>
+              <a-input prefix="￥" suffix="RMB" v-model="newPrice" />
+            </a-modal>
+            <a-card-meta :loading="loading" :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
             </a-card-meta>
           </a-card>
         </a-col>
@@ -182,13 +247,34 @@
       <div v-for="(item, index) in row5_books" :key="index" :title="item.title">
         <a-col :span="8">
           <a-card :loading="loading" hoverable style="width: 300px">
-            <img alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
+            <img @click="toDetail(item.isbn)" alt="example" :src="item.coverUrl" slot="cover" style="width:300px;height: 350px;" />
             <template class="ant-card-actions" slot="actions">
-              <a-button shape="circle" icon="setting"></a-button>
-              <a-button shape="circle" icon="edit"></a-button>
-              <a-button shape="circle" icon="ellipsis"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="info"></a-button>
+              <a-button @click="toDetail(item.isbn)" shape="circle" icon="edit"></a-button>
+              <a-dropdown>
+                <a-menu slot="overlay" @click="handleMenuClick" @openChange="openMenu(item)">
+                  <a-menu-item key="1">
+                    <a-icon type="delete" />书目下架（删除）</a-menu-item>
+                  <a-menu-item key="2">
+                    <a-icon type="pay-circle" />调整价格</a-menu-item>
+                  <a-menu-item key="3">
+                    <a-icon type="rocket" />更多功能敬请期待</a-menu-item>
+                </a-menu>
+    
+                <a-button style="margin-left: 8px"> More
+                  <a-icon type="down" />
+                </a-button>
+    
+              </a-dropdown>
             </template>
-            <a-card-meta :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
+            <a-modal title="下架" :visible="popVisible" @ok="handleOk" :confirmLoading="confirmLoading" @cancel="handleCancel">
+              <p>您确认要下架这本书吗？</p>
+            </a-modal>
+            <a-modal title="价格调整" v-model="modalVisible" @ok="modalOK" @cancel="modalCancel">
+              <p>请输入您想设置的新价格：</p>
+              <a-input prefix="￥" suffix="RMB" v-model="newPrice" />
+            </a-modal>
+            <a-card-meta :loading="loading" :title="item.title" :description="`价格：${item.price}元   销量：${item.sales}个   库存：${item.stock}个`">
             </a-card-meta>
           </a-card>
         </a-col>
@@ -235,6 +321,8 @@
         form: this.$form.createForm(this),
         visible: false,
         modalVisible: false,
+        popVisible: false,
+        confirmLoading: false,
         headers: {
           authorization: 'authorization-text',
         },
@@ -243,7 +331,7 @@
         isbnOperating: null,
         //调整价格的input绑定输入
         newPrice: null,
-
+        
         //上传书籍（上架）
         isbn: null,
         title: null,
@@ -396,7 +484,7 @@
         if (this.isbnOperating) {
           //书籍下架
           if (e.key == "1") {
-            this.deleteBook(this.isbnOperating)
+            this.deleteBook()
           }
           //调整价格
           else if (e.key == "2") {
@@ -420,18 +508,61 @@
         console.log(e);
         this.modalVisible = false;
         console.log(this.newPrice)
-        this.$message.success('成功调整价格至'+this.newPrice+"元");
+        console.log(this.isbnOperating)
+        var _this = this;
+        this.axios.put('/api/book/'+_this.isbnOperating+'/price', {
+          price: _this.newPrice,
+        }).then(function(response) {
+          console.log(response.data);
+          if (response.data) {
+            _this.$message.success(
+              '成功调整价格至'+_this.newPrice+"元",
+              5,
+            );
+          }
+        }).catch(function(error) {
+          console.log(error);
+          _this.$message.error('书籍调整价格出现错误', 5);
+        })
       },
       
       modalCancel(e) {
         console.log(e);
-        this.modalVisible = false;
+        this.popVisible = false;
         this.$message.warning('放弃调整价格');
         console.log(this.modalVisible)
       },
 
-      deleteBook(isbn) {
-        console.log(isbn)
+      deleteBook() {
+        this.popVisible = true;
+      },
+      
+      handleOk() {
+        this.ModalText = '正在删除这个满减促销...';
+        this.confirmLoading = true;
+        var _this = this;
+        this.axios.delete('/api/book/' + this.isbnOperating).then(function(response) {
+          console.log(response.data);
+          if (response.data) {
+            _this.$message.success(
+              '书籍成功下架',
+              5,
+            );
+            _this.getBooks(this.current);
+          }
+        }).catch(function(error) {
+          console.log(error);
+          this.$message.error('书籍删除出现错误', 5);
+        })
+        setTimeout(() => {
+          this.popVisible = false;
+          this.confirmLoading = false;
+        }, 2000);
+      },
+      
+      handleCancel() {
+        this.$message.info('放弃本次删除操作', 5);
+        this.popVisible = false;
       },
 
       infoClickRow1(e) {
@@ -444,6 +575,7 @@
       //e即点击的页面数字
       pageChanged(e) {
         console.log(e)
+        this.current = e;
         this.getBooks(e);
       },
 
@@ -481,9 +613,12 @@
               '书籍上架成功',
               5,
             );
+            _this.visible = false;
+            _this.getBooks(_this.current);
           }
         }).catch(function(error) {
           console.log(error);
+          _this.visible = false;
           _this.$message.error('书籍上架出现错误', 5);
         })
       },

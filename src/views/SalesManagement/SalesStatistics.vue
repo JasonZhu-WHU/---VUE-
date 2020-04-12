@@ -38,23 +38,6 @@
 
     <div id="myChart" style="width:80%;height: 400px;margin:0 auto"></div>
 
-    <!--    <a-row type="flex">
-      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="10">
-        
-      </a-col>
-      <a-col :xs="10" :sm="8" :md="6" :lg="4" :xl="2"> </a-col>
-      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="10">
-        <a-list itemLayout="horizontal" :dataSource="data">
-          <a-list-item slot="renderItem" slot-scope="item">
-            <a-list-item-meta description="Ant Design, a design language for background applications, is refined by Ant UED Team">
-              <a slot="title" href="https://www.antdv.com/">{{item.title}}</a>
-              <a-avatar slot="avatar" style="backgroundColor:#87d068" icon="solution" />
-            </a-list-item-meta>
-          </a-list-item>
-        </a-list>
-      </a-col>
-    </a-row> -->
-
   </div>
 </template>
 
@@ -93,12 +76,12 @@
         num_arrow_type: "arrow-up",
         val_arrow_type: "arrow-up",
         color: 'cf1322',
+        chartType: "pie",
         data,
       }
     },
     created() {
       this.getStatistics();
-      // this.getChartData();
     },
 
     mounted() {
@@ -108,7 +91,7 @@
       drawPieChart() {
         // 基于准备好的dom，初始化echarts实例
         let myChart = echarts.init(document.getElementById('myChart'))
-
+        myChart.clear();
         var _this = this;
         this.axios.get('/api/analysis/category', {
           params: {
@@ -169,7 +152,7 @@
       drawLineChart() {
         // 基于准备好的dom，初始化echarts实例
         let myChart = echarts.init(document.getElementById('myChart'))
-
+        myChart.clear();
         //获取销量统计范围的时间戳
         var _this = this;
         if (_this.startDate == null) {
@@ -251,9 +234,6 @@
               },
               legend: {
                 orient: 'horizontal',
-                // x: 'right', //可设定图例在左、右、居中
-                // y: 'center', //可设定图例在上、下、居中
-                // padding: [0, 50, 0, 0], //可设定图例[距上方距离，距右方距离，距下方距离，距左方距离]
                 data: categories
               },
               grid: {
@@ -319,8 +299,9 @@
 
       chartChange(e) {
         console.log(e)
+        this.chartType = e;
         if (e == "pie") {
-          console.log("pie")
+          this.drawPieChart();
         } else {
           this.drawLineChart();
         }
@@ -332,7 +313,12 @@
         console.log(this.startDate)
         this.startDate = Date.parse(dateString[0] + " 00:00:00")
         this.endDate = Date.parse(dateString[1] + " 23:59:59")
-        this.drawPieChart()
+        if(this.chartType == "pie"){
+          this.drawPieChart()
+        }
+        else{
+          this.drawLineChart()
+        }
       }
     }
   }
