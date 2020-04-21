@@ -71,7 +71,7 @@ const routes = [{
         component: Swiper
       },
     ]
-  },
+  }
 ]
 
 const router = new VueRouter({

@@ -10,7 +10,7 @@
           <a-button @click="updateCategory(item.categoryId, item.category)" style="margin-left: 1%;" type="primary"
             shape="circle" icon="edit"></a-button>
           <a-button @click="deleteCategory(item.categoryId)" style="margin-left: 1%;" type="danger" shape="circle" icon="delete"></a-button>
-          <a-modal title="Title" :visible="visible" @ok="handleOk" :confirmLoading="confirmLoading" @cancel="handleCancel">
+          <a-modal title="删除分类再次确认" :visible="visible" @ok="handleOk" :confirmLoading="confirmLoading" @cancel="handleCancel">
             <p>您确认要删除这个分类吗？</p>
           </a-modal>
         </div>

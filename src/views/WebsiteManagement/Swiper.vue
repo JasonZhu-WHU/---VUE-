@@ -9,7 +9,7 @@
     <a-collapse v-model="activeKey">
       <a-collapse-panel header="编辑或删除已有轮播图" key="1">
         <div v-for="(item, index) in carousels" :key="index">
-          <b style="margin-right: 5%;">分类{{index+1}}:</b>
+          <b style="margin-right: 5%;">轮播图{{index+1}}:</b>
           <a-input v-model="item.carouselUrl" style="width:50%" />
           <a-button @click="updateCarousel(item.carouselId, item.carouselUrl)" style="margin-left: 1%;" type="primary"
             shape="circle" icon="edit"></a-button>

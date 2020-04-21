@@ -519,6 +519,7 @@
               '成功调整价格至'+_this.newPrice+"元",
               5,
             );
+            _this.getBooks(_this.current)
           }
         }).catch(function(error) {
           console.log(error);
