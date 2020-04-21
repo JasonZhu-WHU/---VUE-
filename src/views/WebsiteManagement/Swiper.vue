@@ -1,3 +1,5 @@
+<!-- Created by Zhu Jie 2017302580305-->
+
 <template>
   <div>
     <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="目前客户端的轮播效果" subTitle="可以在下方重新管理轮播图" />

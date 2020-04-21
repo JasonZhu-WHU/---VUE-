@@ -21,3 +21,15 @@ Repo for a back end management system of an online bookstore based on VUE
 
 - 使用Spring Boot
 - 另外一位同学负责
+
+
+
+**功能设计图**
+
+![功能设计.jpg](https://s1.ax1x.com/2020/04/21/J3bYJP.jpg)
+
+
+
+**博客链接**
+
+- 以后等我整理好，关于本项目的具体说明发在我的知乎博客上
